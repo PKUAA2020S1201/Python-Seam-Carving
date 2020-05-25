@@ -40,3 +40,37 @@ def seam_with_minimum_forward_energy(image):
     for i in range(n - 1, 0, -1):
         seam[i], j = j, g[i, j]
     return seam
+
+
+@nb.jit
+def seam_with_minimum_backward_energy(image):
+    n, m, c = image.shape
+    f = np.zeros((n, m), dtype=np.float32)
+    g = np.zeros((n, m), dtype=np.int)
+    for i in range(n):
+        for j in range(m):
+            if j == 0:
+                delta = distance(image[i, j + 1], image[i, j]) * 2
+            elif j == m - 1:
+                delta = distance(image[i, j - 1], image[i, j]) * 2
+            else:
+                delta = distance(image[i, j - 1], image[i, j + 1])
+            f[i, j] += delta
+            if i == 0:
+                delta = distance(image[i + 1, j], image[i, j]) * 2
+            elif i == n - 1:
+                delta = distance(image[i - 1, j], image[i, j]) * 2
+            else:
+                delta = distance(image[i - 1, j], image[i + 1, j])
+            f[i, j] += delta
+    for i in range(1, n):
+        for j in range(m):
+            l = max(0, j - 1)
+            r = min(m, j + 2)
+            g[i, j] = np.argmin(f[i - 1, l : r]) + l
+            f[i, j] = f[i, j] + np.min(f[i - 1, l : r])
+    seam = np.zeros(n, dtype=np.int)
+    j = np.argmin(f[n - 1])
+    for i in range(n - 1, 0, -1):
+        seam[i], j = j, g[i, j]
+    return seam
