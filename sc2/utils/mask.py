@@ -1,7 +1,23 @@
+"""
+sc2.utils.mask
+"""
+
 import numpy as np
 
 
 def draw_mask(image: np.ndarray) -> np.ndarray:
+    """
+    draw a mask on an image using OpenCV
+
+    arguments:
+        image:  numpy array, in RGB order
+    returns:
+        result: the mask read
+    
+    NOTE:
+        - press Q to finish
+    """
+
     from cv2 import (
         imshow,
         circle,

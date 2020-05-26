@@ -1,3 +1,9 @@
+"""
+sc2.utils.imageio
+
+image read/write/show functions
+"""
+
 import numpy as np
 import glob
 import os
@@ -14,6 +20,10 @@ config = ImageioConfiguration()
 
 
 def configurate(name: str, value):
+    """
+    modify config
+    """
+
     if hasattr(config, name):
         setattr(config, name, value)
     else:
@@ -21,6 +31,21 @@ def configurate(name: str, value):
 
 
 def image_load(filename: str, mode=None) -> np.ndarray:
+    """
+    load the image
+
+    arguments:
+        filename:   str
+        mode:       str, "cv2" or "pil", if not specified, use config.default_load_mode
+    returns:
+        image:      numpy array
+    
+    NOTE:
+        - the function will automatically detect filetype if not specified
+        - the function will try to search in "images" directory if not specified
+        - the returned image is in RGB order
+    """
+
     dirname = os.path.dirname(filename)
     basename = os.path.basename(filename)
 
@@ -63,6 +88,21 @@ def image_load(filename: str, mode=None) -> np.ndarray:
 
 
 def image_save(filename: str, image: np.ndarray, mode=None):
+    """
+    save the image
+
+    arguments:
+        filename:   str
+        image:      numpy array
+        mode:       str, "cv2" or "pil", if not specified, use config.default_save_mode
+    returns:
+        none
+    
+    NOTE:
+        - the image passed in should be in RGB order
+        - use .png filetype as default if not specified
+    """
+
     dirname = os.path.dirname(filename)
     basename = os.path.basename(filename)
 
@@ -96,6 +136,22 @@ def image_save(filename: str, image: np.ndarray, mode=None):
 
 
 def image_show(image: np.ndarray, name="example", mode=None, freeze=False):
+    """
+    show the image
+
+    arguments:
+        image:  numpy array
+        name:   str, window's name (for cv2 mode)
+        mode:   str, "cv2" or "plt", if not specified, use config.default_show_mode
+        freeze: boolean, whether freeze the window (for cv2 mode)
+    returns:
+        none
+    
+    NOTE:
+        - image passed in should be in RGB order
+        - use `%pylab inline` in jupyter notebooks
+    """
+
     image = np.copy(image)
 
     mode = config.default_show_mode if mode is None else mode

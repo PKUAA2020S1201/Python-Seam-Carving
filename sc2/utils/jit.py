@@ -1,3 +1,9 @@
+"""
+sc2.utils.jit
+
+just in time
+"""
+
 import numba
 import sc2
 
@@ -11,6 +17,10 @@ config = JitConfiguration()
 
 
 def configurate(name: str, value):
+    """
+    modify config
+    """
+
     if hasattr(config, name):
         setattr(config, name, value)
     else:
@@ -18,18 +28,40 @@ def configurate(name: str, value):
 
 
 def enable():
+    """
+    enable just in time globally
+    """
+
     configurate("enable", True)
 
 
 def disable():
+    """
+    disable just in time globally
+    """
+
     configurate("enable", False)
 
 
 def target(tar: str):
+    """
+    set the target device for numba.jit
+    """
+
     configurate("target", tar)
 
 
 def just_in_time(*args, **kwargs):
+    """
+    the replacement of numba.jit wrapper
+
+    NOTE:
+        if jit is enabled,
+            the jit function will be used, 
+        otherwise,
+            the original function will be used.
+    """
+
     if "target" in kwargs or len(args) >= 3:
         raise ValueError(f"jit arguments should not contain target")
     
