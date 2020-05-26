@@ -12,6 +12,15 @@ def gaussian_blur(image: np.ndarray) -> np.ndarray:
 
 
 def sobel(image: np.ndarray) -> np.ndarray:
+    """
+    calculate sobel gradient as energy map
+
+    arguments:
+        image:  numpy 2-d or 3-d array, with shape (n, m, ...)
+    returns:
+        energy: numpy 2-d array, with shape (n, m)
+    """
+
     image = np.copy(image)
     image = convert_to_gray(image)
     image = gaussian_blur(image)
