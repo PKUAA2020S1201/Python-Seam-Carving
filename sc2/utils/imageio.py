@@ -161,7 +161,8 @@ def image_show(image: np.ndarray, name="example", mode=None, freeze=False):
         from cv2 import cvtColor, COLOR_RGB2BGR
         namedWindow(name)
         # convert RGB to BGR
-        image = cvtColor(image, COLOR_RGB2BGR)
+        if len(image.shape) == 3 and image.shape[2] == 3:
+            image = cvtColor(image, COLOR_RGB2BGR)
         imshow(name, image)
         if freeze:
             return waitKey()
